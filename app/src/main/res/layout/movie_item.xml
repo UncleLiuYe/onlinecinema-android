@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="movie"
+            type="com.liuyetech.myapplication.entity.Movie" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="@dimen/_95sdp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/video_item_img"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_125sdp"
+            android:contentDescription="@string/app_name"
+            android:imageURL="@{movie.moviePoster}"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="@dimen/_10sdp"
+            app:riv_oval="false" />
+
+        <TextView
+            android:id="@+id/video_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{movie.movieName}"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="@dimen/_11ssp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:textColor="@color/colorTextIcons"
+            android:padding="@dimen/_3sdp"
+            android:text="@{movie.movieTagline}"
+            android:textSize="@dimen/_9ssp" />
+    </LinearLayout>
+</layout>

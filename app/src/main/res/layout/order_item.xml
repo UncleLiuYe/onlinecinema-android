@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="movie"
+            type="com.liuyetech.myapplication.entity.Movie" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eee">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="@dimen/_105sdp"
+                android:layout_height="@dimen/_150sdp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/detail_video_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imageURL="@{movie.moviePoster}"
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/detail_video_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{movie.movieName}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/detail_video_lang_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{movie.movieLang +"/"+movie.movieArea}'
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/detail_video_tag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{movie.movieGenres}'
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/detail_video_duration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{movie.movieRuntime +"分钟"}'
+                    android:textSize="@dimen/_11ssp" />
+
+                <TextView
+                    android:id="@+id/detail_video_release_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{movie.movieReleaseTime +"下映"}'
+                    android:textColor="@color/design_default_color_error"
+                    android:textSize="@dimen/_12ssp" />
+
+                <TextView
+                    android:id="@+id/detail_video_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='@{movie.moviePrice +"元"}'
+                    android:textColor="@color/design_default_color_error"
+                    android:textSize="@dimen/_13ssp" />
+
+                <TextView
+                    android:id="@+id/detail_video_total_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text='1张'
+                    android:textColor="@color/design_default_color_error"
+                    android:textSize="@dimen/_13ssp" />
+
+                <LinearLayout
+                    android:id="@+id/detail_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <include layout="@layout/underline" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="movie"
+            type="com.liuyetech.myapplication.entity.Movie" />
+    </data>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:focusableInTouchMode="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        tools:context=".activity.VideoDetailActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="@dimen/_105sdp"
+                    android:layout_height="@dimen/_150sdp"
+                    android:orientation="horizontal">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/detail_video_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:imageURL="@{movie.moviePoster}"
+                        android:scaleType="centerCrop"
+                        app:riv_corner_radius="@dimen/_10sdp"
+                        app:riv_oval="false" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/detail_video_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{movie.movieName}"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16ssp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/detail_video_lang_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text='@{movie.movieLang +"/"+movie.movieArea}'
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/detail_video_tag"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text='@{movie.movieGenres}'
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/detail_video_duration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text='@{movie.movieRuntime+"分钟"}'
+                        android:textSize="@dimen/_11ssp" />
+
+                    <TextView
+                        android:id="@+id/detail_video_release_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text='@{movie.movieReleaseTime+"下映"}'
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <Button
+                        android:id="@+id/detail_video_buy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/teal_700"
+                        android:text="立即购票" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/detail_plot_title"
+                    layout="@layout/module_title" />
+
+                <TextView
+                    android:id="@+id/detail_video_plot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{movie.movieOverview}" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/detail_preview_title"
+                    layout="@layout/module_title" />
+
+                <com.google.android.exoplayer2.ui.StyledPlayerView
+                    android:id="@+id/detail_video_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/detail_director_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/detail_director_title"
+                    layout="@layout/module_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/detail_director_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/detail_star_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/detail_star_title"
+                    layout="@layout/module_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/detail_star_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>
