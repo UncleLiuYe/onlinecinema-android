@@ -19,6 +19,9 @@ public class RoomBasicInfo implements Serializable {
     //房间贵宾信息
     private List<RoomVip> roomVips;
 
+    public RoomBasicInfo() {
+    }
+
     public String getRoomName() {
         return roomName;
     }

@@ -13,6 +13,9 @@ public class News implements Serializable {
     private String newsTagline;
     private Integer newsCreaterId;
 
+    public News() {
+    }
+
     public Integer getNewsId() {
         return newsId;
     }

@@ -1,6 +1,7 @@
 package com.liuyetech.myapplication.interceptor;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -19,13 +20,14 @@ public class TokenInterceptor implements Interceptor {
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
-
+        Log.e("123123", request.url().uri().toString());
         Request newRequest = request.newBuilder().addHeader("onlinecinema"
-                , String.valueOf(SharedPreferencesUtils.getParam(MainApplication.context, "token", ""))).build();
+                , String.valueOf(SharedPreferencesUtils.getParam(MainApplication.context, "token", "123123"))).build();
 
         Response response = chain.proceed(newRequest);
 
         if (isTokenExpired(response)) {
+            Log.e("123123", request.url().uri() + "+++401");
             SharedPreferencesUtils.setParam(MainApplication.context, "token", "");
             Intent intent = new Intent(MainApplication.context, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -10,6 +10,9 @@ public class Cast {
 
     private String castProfileImg;
 
+    public Cast() {
+    }
+
     public Integer getCastId() {
         return castId;
     }

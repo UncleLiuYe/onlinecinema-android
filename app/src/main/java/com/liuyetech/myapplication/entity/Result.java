@@ -10,6 +10,9 @@ public class Result<T> {
     @JsonProperty(value = "data")
     private T data;
 
+    public Result() {
+    }
+
     public Integer getCode() {
         return code;
     }

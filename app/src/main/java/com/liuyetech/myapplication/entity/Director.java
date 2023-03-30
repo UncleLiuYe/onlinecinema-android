@@ -8,6 +8,9 @@ public class Director {
 
     private String directorAvator;
 
+    public Director() {
+    }
+
     public Integer getDirectorId() {
         return directorId;
     }

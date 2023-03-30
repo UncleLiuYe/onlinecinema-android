@@ -35,6 +35,9 @@ public class Movie implements Serializable {
 
     private Category category;
 
+    public Movie() {
+    }
+
     public Integer getMovieId() {
         return movieId;
     }

@@ -106,7 +106,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="您购买的商品委虚拟内容服务，购买后不支持退订或者退换."
+            android:text="您购买的商品为虚拟内容服务，购买后不支持退订或者退换."
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         </TextView>

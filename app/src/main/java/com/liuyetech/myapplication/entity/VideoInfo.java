@@ -9,6 +9,9 @@ public class VideoInfo implements Serializable {
     private String videoUrl;
     private String videoPic;
 
+    public VideoInfo() {
+    }
+
     public Long getVideoId() {
         return videoId;
     }

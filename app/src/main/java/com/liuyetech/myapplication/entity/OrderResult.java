@@ -13,6 +13,9 @@ public class OrderResult {
     private Object user;
     private OrderDetailDTO orderDetail;
 
+    public OrderResult() {
+    }
+
     public static class OrderDetailDTO {
         private Integer orderDetailId;
         private Integer orderId;
@@ -21,6 +24,9 @@ public class OrderResult {
         private Integer num;
         private Object order;
         private Movie movie;
+
+        public OrderDetailDTO() {
+        }
 
         public Integer getOrderDetailId() {
             return orderDetailId;

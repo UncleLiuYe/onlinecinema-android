@@ -7,6 +7,10 @@ public class User {
     private String userAvator;
     private Integer userSex;
 
+    public User() {
+
+    }
+
     public User(Integer userId, String userName, String userNickname, String userAvator, Integer userSex) {
         this.userId = userId;
         this.userName = userName;

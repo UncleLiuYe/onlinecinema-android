@@ -7,6 +7,9 @@ public class RoomVip implements Serializable {
     private String userName;
     private String userAvator;
 
+    public RoomVip() {
+    }
+
     public Long getUserId() {
         return userId;
     }

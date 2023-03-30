@@ -11,6 +11,9 @@ public class Msg {
     private int type;
     private RoomVip roomVip;
 
+    public Msg() {
+    }
+
     public String getContent() {
         return content;
     }

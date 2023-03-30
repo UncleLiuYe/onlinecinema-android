@@ -3,12 +3,15 @@ package com.liuyetech.myapplication.entity;
 public class Crew {
 
     private Integer crewId;
-    
+
     private String crewName;
-    
+
     private String crewProfileImg;
-    
+
     private String crewJob;
+
+    public Crew() {
+    }
 
     public Integer getCrewId() {
         return crewId;

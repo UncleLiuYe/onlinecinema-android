@@ -7,6 +7,9 @@ public class RoomCreaterInfo implements Serializable {
     private String userName;
     private String userAvator;
 
+    public RoomCreaterInfo() {
+    }
+
     public Long getUserId() {
         return userId;
     }

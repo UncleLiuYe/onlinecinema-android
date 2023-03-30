@@ -8,6 +8,9 @@ public class Actor {
 
     private String actorAvator;
 
+    public Actor() {
+    }
+
     public Integer getActorId() {
         return actorId;
     }

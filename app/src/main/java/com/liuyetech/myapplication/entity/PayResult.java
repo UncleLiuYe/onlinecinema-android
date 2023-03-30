@@ -9,6 +9,9 @@ public class PayResult {
     private String result;
     private String memo;
 
+    public PayResult() {
+    }
+
     public PayResult(Map<String, String> rawResult) {
         if (rawResult == null) {
             return;

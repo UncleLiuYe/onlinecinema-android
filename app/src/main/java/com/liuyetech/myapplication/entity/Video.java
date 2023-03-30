@@ -20,6 +20,9 @@ public class Video implements Serializable {
     private String videoImg;
     private static final long serialVersionUID = 1L;
 
+    public Video() {
+    }
+
     public Integer getVideoId() {
         return videoId;
     }
