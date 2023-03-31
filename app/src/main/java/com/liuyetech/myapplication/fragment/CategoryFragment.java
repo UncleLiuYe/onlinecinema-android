@@ -2,12 +2,9 @@ package com.liuyetech.myapplication.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,10 +25,8 @@ import java.util.List;
 public class CategoryFragment extends Fragment {
     private FragmentCategoryBinding binding;
     private MovieViewModel movieViewModel;
-
     private Integer cid;
     private String cname;
-
     private final List<Movie> movies = new ArrayList<>();
     private CategoryAdapter categoryAdapter;
 
@@ -53,7 +48,7 @@ public class CategoryFragment extends Fragment {
         binding.categoryTitle.moduleTitle.setText(this.cname);
         movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
 
-        categoryAdapter = new CategoryAdapter(movies, requireContext());
+        categoryAdapter = new CategoryAdapter(movies);
         binding.movieGridView.setAdapter(categoryAdapter);
 
         binding.movieGridView.setOnItemClickListener((parent, view1, position, id) -> {

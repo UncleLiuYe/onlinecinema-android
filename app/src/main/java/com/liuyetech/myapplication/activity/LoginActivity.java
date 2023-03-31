@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
                 userViewModel.userLogin(username, password).observe(this, result -> {
-                    Optional.ofNullable(result).ifPresent(userResult -> {
+                    Optional.of(result).ifPresent(userResult -> {
                         if (userResult.getCode() == 200) {
                             User user = userResult.getData();
                             Optional.ofNullable(user).ifPresent(user1 -> {

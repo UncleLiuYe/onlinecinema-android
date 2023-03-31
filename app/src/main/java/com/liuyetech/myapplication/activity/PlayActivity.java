@@ -1,10 +1,8 @@
 package com.liuyetech.myapplication.activity;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.liuyetech.myapplication.R;
 import com.liuyetech.myapplication.adapter.MsgAdapter;
 import com.liuyetech.myapplication.databinding.ActivityPlayBinding;
@@ -46,7 +45,6 @@ public class PlayActivity extends AppCompatActivity {
     public static final String TAG = "PlayActivity";
     private RoomViewModel roomViewModel;
     private ActivityPlayBinding binding;
-    private Long videoDuration = 0L;
     private boolean isPause = false;
     private boolean isPlay = false;
 
@@ -62,13 +60,6 @@ public class PlayActivity extends AppCompatActivity {
 
     private RoomBasicInfo roomBasicInfo;
     private static final ObjectMapper objectMapper = new ObjectMapper();
-    private Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Log.e(TAG, "handleMessage: " + msg.obj);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +70,7 @@ public class PlayActivity extends AppCompatActivity {
 
         roomBasicInfo = (RoomBasicInfo) getIntent().getSerializableExtra("roomBasicInfo");
 
-        Request request = new Request.Builder().addHeader("token", State.token).url("ws://liuyetech.com:8888/api/v1/room/" + roomBasicInfo.getRoomName()).build();
+        Request request = new Request.Builder().addHeader("token", State.token).url("ws://" + RetrofitUtils.HOST.replace("http://", "") + "room/" + roomBasicInfo.getRoomName()).build();
         OkHttpClient client = new OkHttpClient();
         webSocket = client.newWebSocket(request, roomWebSocket);
 
@@ -102,8 +93,6 @@ public class PlayActivity extends AppCompatActivity {
                     Log.e(TAG, "initData: " + roomBasicInfo.getData());
                     binding.videoName.setText(roomBasicInfo.getData().getVideoInfo().getVideoName());
 
-                    videoDuration = roomBasicInfo.getData().getVideoInfo().getVideoDuration();
-
                     exoPlayer = new ExoPlayer.Builder(PlayActivity.this).build();
 
                     MediaItem mediaItem = MediaItem.fromUri(RetrofitUtils.PLAY_HOST + roomBasicInfo.getData().getVideoInfo().getVideoUrl());
@@ -111,6 +100,17 @@ public class PlayActivity extends AppCompatActivity {
                     exoPlayer.setPlayWhenReady(true);
                     exoPlayer.prepare();
                     binding.videoView.setPlayer(exoPlayer);
+
+                    binding.videoView.setFullscreenButtonClickListener(new StyledPlayerView.FullscreenButtonClickListener() {
+                        @Override
+                        public void onFullscreenButtonClick(boolean isFullScreen) {
+                            if (isFullScreen) {
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                            } else {
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                            }
+                        }
+                    });
 
                     exoPlayer.addListener(new Player.Listener() {
                         @Override
@@ -176,12 +176,9 @@ public class PlayActivity extends AppCompatActivity {
     protected void onDestroy() {
         if (isPlay) {
             exoPlayer.stop();
-            exoPlayer.release();
-            exoPlayer = null;
-        } else {
-            exoPlayer.release();
-            exoPlayer = null;
         }
+        exoPlayer.release();
+        exoPlayer = null;
         RoomVip roomVip = new RoomVip();
         roomVip.setUserAvator(State.user.getUserAvator());
         roomVip.setUserId(State.user.getUserId().longValue());
@@ -250,13 +247,6 @@ public class PlayActivity extends AppCompatActivity {
         public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
             super.onMessage(webSocket, text);
             String[] messageArr = text.split("\\|");
-//            Log.e(TAG, (Math.abs(videoDuration - binding.videoView.getCurrentPosition() - (Long.parseLong(text))) + ""));
-//            if ((Math.abs(videoDuration - binding.videoView.getCurrentPosition() - (Long.parseLong(text)))) > 400) {
-//                Log.e(TAG, "服务器播放进度: " + (Long.parseLong(text)));
-//                Log.e(TAG, "客户端播放进度: " + (binding.videoView.getCurrentPosition()));
-//                Log.e(TAG, "onMessage: 更新一次");
-//                runOnUiThread(() -> updatePlayPosition(Long.parseLong(text)));
-//            }
             if ("msg".equals(messageArr[0])) {
                 Msg msg;
                 try {

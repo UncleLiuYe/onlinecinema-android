@@ -36,6 +36,7 @@ public class UserRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<User>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });
@@ -56,6 +57,7 @@ public class UserRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<User>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });

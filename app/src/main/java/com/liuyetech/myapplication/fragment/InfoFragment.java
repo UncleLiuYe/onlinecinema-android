@@ -1,31 +1,25 @@
 package com.liuyetech.myapplication.fragment;
 
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.liuyetech.myapplication.R;
-import com.liuyetech.myapplication.activity.MovieDetailActivity;
 import com.liuyetech.myapplication.adapter.NewsAdapter;
-import com.liuyetech.myapplication.databinding.BuyBottomViewBinding;
 import com.liuyetech.myapplication.databinding.FragmentInfoBinding;
 import com.liuyetech.myapplication.databinding.NewsBottomViewBinding;
 import com.liuyetech.myapplication.entity.News;
-import com.liuyetech.myapplication.listener.OnItemClickListener;
 import com.liuyetech.myapplication.viewmodel.NewsViewModel;
 
 import java.util.ArrayList;
@@ -35,7 +29,7 @@ public class InfoFragment extends Fragment {
     private FragmentInfoBinding binding;
     private NewsViewModel newsViewModel;
 
-    private List<News> news = new ArrayList<>();
+    private final List<News> news = new ArrayList<>();
 
     private NewsAdapter newsAdapter;
 
@@ -81,6 +75,7 @@ public class InfoFragment extends Fragment {
         newsViewModel.getAllNews().observe(getViewLifecycleOwner(), news1 -> {
             if (news1 != null) {
                 int oldSize = news1.size();
+                news.clear();
                 newsAdapter.notifyItemRangeRemoved(0, oldSize);
                 news.addAll(news1);
                 newsAdapter.notifyItemRangeInserted(0, news.size());

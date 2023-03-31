@@ -45,6 +45,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<List<Movie>>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });
@@ -70,6 +71,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<List<Cast>>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });
@@ -96,6 +98,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<List<Crew>>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });
@@ -121,6 +124,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<Movie>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });
@@ -146,6 +150,7 @@ public class MovieRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<List<Movie>>> call, @NonNull Throwable t) {
+                t.printStackTrace();
                 data.setValue(null);
             }
         });
