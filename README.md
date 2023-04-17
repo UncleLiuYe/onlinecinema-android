@@ -1,5 +1,6 @@
 
 # Android端：<br/>
+本端正在积极开发中❤！
 ## 一、Java-WebSocket：<br/>
 本项目使用Java-WebSocket实现客户端与服务器Websocket通信。Java-WebSocket库是一个 100% 由Java 编写的准系统 WebSocket 服务器和客户端实现。 底层类实现了 java.nio，它允许非阻塞事件驱动模型（类似于 Web 浏览器的 WebSocket API），实现的 WebSocket 协议版本为：RFC 6455、RFC 7692。<br/>
 ## 二、Jackson：<br/>
