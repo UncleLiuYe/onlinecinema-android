@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (item.getItemId() == R.id.bottom_nav_my) {
                 if (TextUtils.isEmpty(State.token)) {
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(this, SignInActivity.class));
                 } else {
                     binding.mainViewPager.setCurrentItem(3, true);
                     return true;

@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
-import com.liuyetech.myapplication.activity.LoginActivity;
+import com.liuyetech.myapplication.activity.SignInActivity;
 import com.liuyetech.myapplication.application.MainApplication;
 import com.liuyetech.myapplication.utils.SharedPreferencesUtils;
 
@@ -26,7 +26,7 @@ public class TokenInterceptor implements Interceptor {
 
         if (isTokenExpired(response)) {
             SharedPreferencesUtils.setParam(MainApplication.context, "token", "");
-            Intent intent = new Intent(MainApplication.context, LoginActivity.class);
+            Intent intent = new Intent(MainApplication.context, SignInActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             MainApplication.context.startActivity(intent);
             return response;

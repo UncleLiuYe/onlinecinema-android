@@ -16,8 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.liuyetech.myapplication.R;
-import com.liuyetech.myapplication.activity.LoginActivity;
 import com.liuyetech.myapplication.activity.PlayActivity;
+import com.liuyetech.myapplication.activity.SignInActivity;
 import com.liuyetech.myapplication.adapter.RoomAdapter;
 import com.liuyetech.myapplication.databinding.FragmentRoomBinding;
 import com.liuyetech.myapplication.entity.RoomBasicInfo;
@@ -55,7 +55,7 @@ public class RoomFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onClick(RoomBasicInfo data) {
                 if (TextUtils.isEmpty(State.token)) {
-                    startActivity(new Intent(requireActivity(), LoginActivity.class));
+                    startActivity(new Intent(requireActivity(), SignInActivity.class));
                 } else {
                     Intent intent = new Intent(requireContext(), PlayActivity.class);
                     intent.putExtra("roomBasicInfo", data);

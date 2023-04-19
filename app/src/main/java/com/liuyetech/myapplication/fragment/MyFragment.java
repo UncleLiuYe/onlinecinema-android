@@ -1,14 +1,11 @@
 package com.liuyetech.myapplication.fragment;
 
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
@@ -17,28 +14,21 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.liuyetech.myapplication.R;
-import com.liuyetech.myapplication.activity.LoginActivity;
-import com.liuyetech.myapplication.activity.MovieDetailActivity;
 import com.liuyetech.myapplication.adapter.OrderDetailAdapter;
-import com.liuyetech.myapplication.databinding.BuyBottomViewBinding;
 import com.liuyetech.myapplication.databinding.FragmentMyBinding;
 import com.liuyetech.myapplication.databinding.OrderBottomViewBinding;
 import com.liuyetech.myapplication.entity.OrderResult;
 import com.liuyetech.myapplication.entity.PayResult;
 import com.liuyetech.myapplication.entity.User;
-import com.liuyetech.myapplication.listener.RequestPayOrderListener;
 import com.liuyetech.myapplication.state.State;
 import com.liuyetech.myapplication.viewmodel.OrderViewModel;
 import com.liuyetech.myapplication.viewmodel.PayViewModel;
