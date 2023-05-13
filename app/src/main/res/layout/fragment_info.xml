@@ -7,7 +7,8 @@
 
     </data>
 
-    <LinearLayout
+    <com.liuyetech.myapplication.CustomSwipeRefreshLayout
+        android:id="@+id/info_swiper_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark"
@@ -15,10 +16,11 @@
         android:padding="@dimen/_5sdp"
         tools:context=".fragment.InfoFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <ListView
             android:id="@+id/news_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </LinearLayout>
+            android:scrollbars="none"
+            android:overScrollMode="never"/>
+    </com.liuyetech.myapplication.CustomSwipeRefreshLayout>
 </layout>

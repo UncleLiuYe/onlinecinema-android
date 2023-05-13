@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class RetrofitUtils {
-    public static final String HOST = "http://192.168.1.4:8888/api/v1/";
+    public static final String HOST = "http://192.168.29.172:8888/api/v1/";
 //    public static final String HOST = "http://liuyetech.com:8888/api/v1/";
 
     public static final String IMAGE_HOST = "https://onlinecinema.oss-cn-beijing.aliyuncs.com/image";

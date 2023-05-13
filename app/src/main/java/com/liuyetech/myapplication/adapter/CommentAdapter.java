@@ -9,26 +9,28 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 
 import com.liuyetech.myapplication.R;
+import com.liuyetech.myapplication.databinding.CommentItemBinding;
 import com.liuyetech.myapplication.databinding.NewsItemBinding;
+import com.liuyetech.myapplication.entity.Comment;
 import com.liuyetech.myapplication.entity.News;
 
 import java.util.List;
 
-public class NewsAdapter extends BaseAdapter {
-    private List<News> news;
+public class CommentAdapter extends BaseAdapter {
+    private List<Comment> comments;
 
-    public NewsAdapter(List<News> news) {
-        this.news = news;
+    public CommentAdapter(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
     public int getCount() {
-        return news.size();
+        return comments.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return news.get(position);
+        return comments.get(position);
     }
 
     @Override
@@ -38,24 +40,24 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        News news1 = news.get(position);
+        Comment comment = comments.get(position);
         ViewHolder viewHolder;
         if (convertView == null) {
-            NewsItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.news_item, parent, false);
+            CommentItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.comment_item, parent, false);
             convertView = binding.getRoot();
             viewHolder = new ViewHolder(binding);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.binding.setNews(news1);
+        viewHolder.binding.setComment(comment);
         return convertView;
     }
 
     static class ViewHolder {
-        NewsItemBinding binding;
+        CommentItemBinding binding;
 
-        public ViewHolder(@NonNull NewsItemBinding binding) {
+        public ViewHolder(@NonNull CommentItemBinding binding) {
             this.binding = binding;
         }
     }

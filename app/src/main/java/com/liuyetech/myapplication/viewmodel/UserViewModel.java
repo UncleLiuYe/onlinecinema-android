@@ -10,6 +10,7 @@ import com.liuyetech.myapplication.entity.User;
 import com.liuyetech.myapplication.repository.UserRepository;
 
 import okhttp3.MultipartBody;
+import retrofit2.Call;
 
 public class UserViewModel extends ViewModel {
     public LiveData<Result<String>> userLogin(SignInVo signInVo) {
@@ -22,6 +23,10 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<Boolean> userCheckToken() {
         return UserRepository.USER_REPOSITORY.userTokenCheck();
+    }
+
+    public LiveData<String> userLogout() {
+        return UserRepository.USER_REPOSITORY.userLogout();
     }
 
     public LiveData<String> userAvatarUpload(MultipartBody.Part avatarFile) {

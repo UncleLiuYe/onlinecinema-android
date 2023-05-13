@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.liuyetech.myapplication"
-        minSdk 26
+        minSdk 29
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -24,8 +24,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     buildFeatures {
@@ -38,7 +38,7 @@ android {
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     testImplementation 'junit:junit:4.13.2'
@@ -75,7 +75,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.15.1'
 
     // https://mvnrepository.com/artifact/com.google.android.exoplayer/exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.5'
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.6'
 
     // https://mvnrepository.com/artifact/io.github.youth5201314/banner
     implementation 'io.github.youth5201314:banner:2.2.2'
@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
     // https://mvnrepository.com/artifact/androidx.core/core-splashscreen
-    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
 
     // https://mvnrepository.com/artifact/com.alipay.sdk/alipaysdk-android
     implementation 'com.alipay.sdk:alipaysdk-android:15.8.11'

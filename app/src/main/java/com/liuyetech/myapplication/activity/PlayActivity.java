@@ -1,5 +1,6 @@
 package com.liuyetech.myapplication.activity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.liuyetech.myapplication.R;
 import com.liuyetech.myapplication.adapter.MsgAdapter;
 import com.liuyetech.myapplication.databinding.ActivityPlayBinding;
+import com.liuyetech.myapplication.entity.Movie;
 import com.liuyetech.myapplication.entity.Msg;
 import com.liuyetech.myapplication.entity.RoomBasicInfo;
 import com.liuyetech.myapplication.entity.RoomVip;
@@ -59,6 +61,8 @@ public class PlayActivity extends AppCompatActivity {
     private List<RoomVip> roomVips = new ArrayList<>();
 
     private RoomBasicInfo roomBasicInfo;
+    private Movie movie;
+    private int type = 0;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -66,22 +70,59 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_play);
 
-        roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+        type = getIntent().getIntExtra("type", 0);
+        if (type == 1) {
+            movie = (Movie) getIntent().getSerializableExtra("movie");
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else if (type == 0) {
+            roomViewModel = new ViewModelProvider(this).get(RoomViewModel.class);
+            roomBasicInfo = (RoomBasicInfo) getIntent().getSerializableExtra("roomBasicInfo");
+            Request request = new Request.Builder().addHeader("token", State.token).url("ws://" + RetrofitUtils.HOST.replace("http://", "") + "room/" + roomBasicInfo.getRoomName()).build();
+            OkHttpClient client = new OkHttpClient();
+            webSocket = client.newWebSocket(request, roomWebSocket);
+            msgs = new ArrayList<>();
+            msgAdapter = new MsgAdapter(msgs);
+            msgAdapter.setHasStableIds(true);
+            binding.msgRecyclerview.setAdapter(msgAdapter);
+            initData(roomBasicInfo.getRoomName());
+        }
 
-        roomBasicInfo = (RoomBasicInfo) getIntent().getSerializableExtra("roomBasicInfo");
+        initExoPlayer();
+        binding.imageBack.setOnClickListener(v -> onBackPressed());
+    }
 
-        Request request = new Request.Builder().addHeader("token", State.token).url("ws://" + RetrofitUtils.HOST.replace("http://", "") + "room/" + roomBasicInfo.getRoomName()).build();
-        OkHttpClient client = new OkHttpClient();
-        webSocket = client.newWebSocket(request, roomWebSocket);
+    private void initExoPlayer() {
+        exoPlayer = new ExoPlayer.Builder(PlayActivity.this).build();
+        MediaItem mediaItem = null;
+        if (type == 0) {
+            mediaItem = MediaItem.fromUri(RetrofitUtils.PLAY_HOST + roomBasicInfo.getVideoInfo().getVideoUrl());
+            binding.videoView.setFullscreenButtonClickListener(isFullScreen -> {
+                if (isFullScreen) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                } else {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                }
+            });
+        } else if (type == 1) {
+            mediaItem = MediaItem.fromUri(RetrofitUtils.PLAY_HOST + movie.getMoviePlayUrl());
+            binding.videoView.setFullscreenButtonClickListener(isFullScreen -> {
 
-        msgs = new ArrayList<>();
-        msgAdapter = new MsgAdapter(msgs);
-        msgAdapter.setHasStableIds(true);
+            });
+        }
+        exoPlayer.setMediaItem(mediaItem);
+        exoPlayer.setPlayWhenReady(true);
+        exoPlayer.prepare();
+        binding.videoView.setPlayer(exoPlayer);
 
-        binding.msgRecyclerview.setAdapter(msgAdapter);
+        exoPlayer.addListener(new Player.Listener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                isPlay = isPlaying;
+            }
+        });
 
-        initData(roomBasicInfo.getRoomName());
-
+        binding.videoView.setVisibility(View.VISIBLE);
+        binding.videoName.setVisibility(View.VISIBLE);
     }
 
     private void initData(String roomName) {
@@ -92,35 +133,6 @@ public class PlayActivity extends AppCompatActivity {
                 if (roomBasicInfo.getCode() == 200) {
                     Log.e(TAG, "initData: " + roomBasicInfo.getData());
                     binding.videoName.setText(roomBasicInfo.getData().getVideoInfo().getVideoName());
-
-                    exoPlayer = new ExoPlayer.Builder(PlayActivity.this).build();
-
-                    MediaItem mediaItem = MediaItem.fromUri(RetrofitUtils.PLAY_HOST + roomBasicInfo.getData().getVideoInfo().getVideoUrl());
-                    exoPlayer.setMediaItem(mediaItem);
-                    exoPlayer.setPlayWhenReady(true);
-                    exoPlayer.prepare();
-                    binding.videoView.setPlayer(exoPlayer);
-
-                    binding.videoView.setFullscreenButtonClickListener(new StyledPlayerView.FullscreenButtonClickListener() {
-                        @Override
-                        public void onFullscreenButtonClick(boolean isFullScreen) {
-                            if (isFullScreen) {
-                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            } else {
-                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                            }
-                        }
-                    });
-
-                    exoPlayer.addListener(new Player.Listener() {
-                        @Override
-                        public void onIsPlayingChanged(boolean isPlaying) {
-                            isPlay = isPlaying;
-                        }
-                    });
-
-                    binding.videoView.setVisibility(View.VISIBLE);
-                    binding.videoName.setVisibility(View.VISIBLE);
                 } else {
                     Toast.makeText(this, roomBasicInfo.getMsg(), Toast.LENGTH_SHORT).show();
                 }
@@ -152,8 +164,6 @@ public class PlayActivity extends AppCompatActivity {
                 Toast.makeText(PlayActivity.this, "请填写信息！", Toast.LENGTH_SHORT).show();
             }
         });
-
-        binding.imageBack.setOnClickListener(v -> onBackPressed());
     }
 
     @Override
@@ -179,20 +189,22 @@ public class PlayActivity extends AppCompatActivity {
         }
         exoPlayer.release();
         exoPlayer = null;
-        RoomVip roomVip = new RoomVip();
-        roomVip.setUserAvator(State.user.getUserAvator());
-        roomVip.setUserId(State.user.getUserId().longValue());
-        roomVip.setUserName(State.user.getUserNickname());
-        Msg msg = new Msg();
-        msg.setRoomVip(roomVip);
-        msg.setType(Msg.TYPE_EXIT);
-        msg.setContent("");
-        try {
-            webSocket.send("exit|" + objectMapper.writeValueAsString(msg));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+        if (type == 0) {
+            RoomVip roomVip = new RoomVip();
+            roomVip.setUserAvator(State.user.getUserAvator());
+            roomVip.setUserId(State.user.getUserId().longValue());
+            roomVip.setUserName(State.user.getUserNickname());
+            Msg msg = new Msg();
+            msg.setRoomVip(roomVip);
+            msg.setType(Msg.TYPE_EXIT);
+            msg.setContent("");
+            try {
+                webSocket.send("exit|" + objectMapper.writeValueAsString(msg));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            webSocket.close(1000, "bye");
         }
-        webSocket.close(1000, "bye");
         super.onDestroy();
     }
 

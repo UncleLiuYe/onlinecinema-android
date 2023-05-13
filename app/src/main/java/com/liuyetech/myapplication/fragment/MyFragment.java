@@ -1,11 +1,13 @@
 package com.liuyetech.myapplication.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
@@ -23,15 +25,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.liuyetech.myapplication.R;
+import com.liuyetech.myapplication.activity.MainActivity;
 import com.liuyetech.myapplication.adapter.OrderDetailAdapter;
+import com.liuyetech.myapplication.adapter.TicketAdapter;
 import com.liuyetech.myapplication.databinding.FragmentMyBinding;
 import com.liuyetech.myapplication.databinding.OrderBottomViewBinding;
+import com.liuyetech.myapplication.databinding.TicketBottomViewBinding;
 import com.liuyetech.myapplication.entity.OrderResult;
 import com.liuyetech.myapplication.entity.PayResult;
+import com.liuyetech.myapplication.entity.Ticket;
 import com.liuyetech.myapplication.entity.User;
 import com.liuyetech.myapplication.state.State;
+import com.liuyetech.myapplication.utils.SharedPreferencesUtils;
 import com.liuyetech.myapplication.viewmodel.OrderViewModel;
 import com.liuyetech.myapplication.viewmodel.PayViewModel;
+import com.liuyetech.myapplication.viewmodel.TicketViewModel;
 import com.liuyetech.myapplication.viewmodel.UserViewModel;
 
 import java.util.ArrayList;
@@ -44,12 +52,15 @@ import okhttp3.RequestBody;
 public class MyFragment extends Fragment {
     private FragmentMyBinding binding;
     private BottomSheetDialog bottomSheetDialog;
+    private BottomSheetDialog ticketSheetDialog;
     private OrderViewModel orderViewModel;
     private PayViewModel payViewModel;
 
     private UserViewModel userViewModel;
-
+    private TicketViewModel ticketViewModel;
     private OrderDetailAdapter orderDetailAdapter;
+    private TicketAdapter ticketAdapter;
+    private List<Ticket> tickets = new ArrayList<>();
     private List<OrderResult> orderResults = new ArrayList<>();
 
     private Handler handler = new Handler(Looper.getMainLooper()) {
@@ -82,11 +93,47 @@ public class MyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        User user = State.user;
+        if (user == null && user.getUserId() == null) {
+            Toast.makeText(requireContext(), "请登陆后查看", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(requireContext(), MainActivity.class));
+            return;
+        }
 
         orderViewModel = new ViewModelProvider(this).get(OrderViewModel.class);
         payViewModel = new ViewModelProvider(this).get(PayViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        ticketViewModel = new ViewModelProvider(this).get(TicketViewModel.class);
+
         orderDetailAdapter = new OrderDetailAdapter(orderResults);
+        ticketAdapter = new TicketAdapter(tickets);
+
+        binding.ticketLayout.setOnClickListener(v -> {
+            ticketSheetDialog = new BottomSheetDialog(requireContext());
+            TicketBottomViewBinding ticketBottomViewBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.ticket_bottom_view, null, false);
+            ticketSheetDialog.setContentView(ticketBottomViewBinding.getRoot());
+
+            ticketBottomViewBinding.ticketListview.setAdapter(ticketAdapter);
+
+            ticketBottomViewBinding.ticketListview.setOnTouchListener((v1, event) -> {
+                if (!ticketBottomViewBinding.ticketListview.canScrollVertically(-1)) {      //canScrollVertically(-1)的值表示是否能向下滚动，false表示已经滚动到顶部
+                    ticketBottomViewBinding.ticketListview.requestDisallowInterceptTouchEvent(false);
+                } else {
+                    ticketBottomViewBinding.ticketListview.requestDisallowInterceptTouchEvent(true);
+                }
+                return false;
+            });
+            ticketSheetDialog.show();
+        });
+
+        binding.logout.setOnClickListener(v -> userViewModel.userLogout().observe(getViewLifecycleOwner(), s -> {
+            if (!TextUtils.isEmpty(s)) {
+                SharedPreferencesUtils.setParam(requireContext(), "token", "");
+                State.user = null;
+                Toast.makeText(requireContext(), s, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(requireContext(), MainActivity.class));
+            }
+        }));
 
         orderDetailAdapter.setRequestPayOrderListener(orderResult -> {
             try {
@@ -115,8 +162,6 @@ public class MyFragment extends Fragment {
         binding.setUser(State.user);
 
         binding.myOrder.setOnClickListener(v -> {
-
-            User user = State.user;
             if (user != null && user.getUserId() != null) {
                 orderViewModel.getOrderListByUid(user.getUserId()).observe(getViewLifecycleOwner(), orderResult -> {
                     if (orderResult != null) {
@@ -153,5 +198,19 @@ public class MyFragment extends Fragment {
     public void onResume() {
         super.onResume();
         userViewModel.userCheckToken();
+        loadTicket();
+    }
+
+    private void loadTicket() {
+        ticketViewModel.list().observe(getViewLifecycleOwner(), tickets1 -> {
+            if (tickets1 != null) {
+                binding.viewTicketCount.setText(tickets1.size() + "");
+                tickets.clear();
+                tickets.addAll(tickets1);
+                ticketAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(requireContext(), "获取电影票失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -69,7 +69,7 @@ public class UserRepository {
 
     public LiveData<Boolean> userTokenCheck() {
         MutableLiveData<Boolean> data = new MutableLiveData<>();
-        userApi.userTokenCheck().enqueue(new Callback<Result<String>>() {
+        userApi.userTokenCheck().enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<Result<String>> call, @NonNull Response<Result<String>> response) {
                 if (response.isSuccessful()) {
@@ -128,6 +128,27 @@ public class UserRepository {
 
             @Override
             public void onFailure(@NonNull Call<Result<User>> call, @NonNull Throwable t) {
+                t.printStackTrace();
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
+
+    public LiveData<String> userLogout() {
+        MutableLiveData<String> data = new MutableLiveData<>();
+        userApi.userLogout().enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<Result<String>> call, @NonNull Response<Result<String>> response) {
+                if (response.isSuccessful()) {
+                    data.setValue(response.body().getMsg());
+                } else {
+                    data.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Result<String>> call, @NonNull Throwable t) {
                 t.printStackTrace();
                 data.setValue(null);
             }

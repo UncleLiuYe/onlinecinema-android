@@ -28,6 +28,9 @@ public interface UserApi {
     @GET("user/info")
     Call<Result<User>> getUserInfo();
 
+    @POST("user/logout")
+    Call<Result<String>> userLogout();
+
     @Multipart
     @POST("user/avatarUpload")
     Call<Result<String>> userAvatarUpload(@Part MultipartBody.Part file);
