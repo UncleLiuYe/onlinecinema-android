@@ -38,15 +38,9 @@ public class InfoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private FragmentInfoBinding binding;
     private NewsViewModel newsViewModel;
 
-    private CommentViewModel commentViewModel;
-
-    private final List<Comment> comments = new ArrayList<>();
-
     private final List<News> news = new ArrayList<>();
 
     private NewsAdapter newsAdapter;
-
-    private CommentAdapter commentAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -59,11 +53,8 @@ public class InfoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         newsViewModel = new ViewModelProvider(this).get(NewsViewModel.class);
-        commentViewModel = new ViewModelProvider(this).get(CommentViewModel.class);
         newsAdapter = new NewsAdapter(news);
         binding.newsList.setAdapter(newsAdapter);
-
-        commentAdapter = new CommentAdapter(comments);
 
         binding.newsList.setOnItemClickListener((parent, view1, position, id) -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
@@ -83,21 +74,6 @@ public class InfoFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     newsBottomViewBinding.contentWebview.requestDisallowInterceptTouchEvent(true);
                 }
                 return false;
-            });
-
-            newsBottomViewBinding.commentList.setAdapter(commentAdapter);
-            commentViewModel.getCommentByNewsId(news.get(position).getNewsId()).observe(getViewLifecycleOwner(), new Observer<List<Comment>>() {
-                @Override
-                public void onChanged(List<Comment> comments1) {
-                    if (comments1 != null) {
-                        comments.clear();
-                        commentAdapter.notifyDataSetChanged();
-                        comments.addAll(comments1);
-                        commentAdapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(getContext(), "获取评论失败", Toast.LENGTH_SHORT).show();
-                    }
-                }
             });
             bottomSheetDialog.show();
         });

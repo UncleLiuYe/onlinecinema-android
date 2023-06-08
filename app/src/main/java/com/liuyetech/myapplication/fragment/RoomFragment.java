@@ -34,7 +34,6 @@ public class RoomFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private RoomAdapter roomAdapter;
     private final List<RoomBasicInfo> rooms = new ArrayList<>();
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,16 +50,13 @@ public class RoomFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         roomAdapter.setHasStableIds(true);
         binding.roomList.setAdapter(roomAdapter);
 
-        roomAdapter.setOnItemClickListener(new OnItemClickListener<RoomBasicInfo>() {
-            @Override
-            public void onClick(RoomBasicInfo data) {
-                if (TextUtils.isEmpty(State.token)) {
-                    startActivity(new Intent(requireActivity(), SignInActivity.class));
-                } else {
-                    Intent intent = new Intent(requireContext(), PlayActivity.class);
-                    intent.putExtra("roomBasicInfo", data);
-                    startActivity(intent);
-                }
+        roomAdapter.setOnItemClickListener(data -> {
+            if (TextUtils.isEmpty(State.token)) {
+                startActivity(new Intent(requireActivity(), SignInActivity.class));
+            } else {
+                Intent intent = new Intent(requireContext(), PlayActivity.class);
+                intent.putExtra("roomBasicInfo", data);
+                startActivity(intent);
             }
         });
 

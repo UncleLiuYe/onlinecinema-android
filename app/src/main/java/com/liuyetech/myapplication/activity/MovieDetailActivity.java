@@ -22,6 +22,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.source.ClippingMediaSource;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MediaSourceFactory;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.liuyetech.myapplication.R;
 import com.liuyetech.myapplication.adapter.MovieCastAdapter;
@@ -103,8 +107,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         binding.detailDirectorTitle.moduleTitle.setText("导演");
         binding.detailStarTitle.moduleTitle.setText("主演");
 
-        MediaItem mediaItem = MediaItem.fromUri(RetrofitUtils.PREVIEW_HOST + movie.getMoviePreviewUrl());
-        exoPlayer.setMediaItem(mediaItem);
+        MediaItem mediaItem = MediaItem.fromUri(RetrofitUtils.PLAY_HOST + movie.getMoviePreviewUrl());
+        MediaSource mediaSource = new DefaultMediaSourceFactory(this).createMediaSource(mediaItem);
+        ClippingMediaSource clippingMediaSource = new ClippingMediaSource(mediaSource,
+                105_000_000, 125_000_000);
+        exoPlayer.setMediaSource(clippingMediaSource);
         exoPlayer.setPlayWhenReady(true);
         exoPlayer.prepare();
         binding.detailVideoPreview.setPlayer(exoPlayer);
